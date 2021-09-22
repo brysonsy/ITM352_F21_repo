@@ -29,6 +29,10 @@ main {
     background-position: center;
 }
 
+header {
+  border: 5px solid black;
+}
+
 /* Further stylizes the div holding the products display */
 div {
     border: 5px solid black;

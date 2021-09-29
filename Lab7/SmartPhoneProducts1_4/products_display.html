@@ -20,6 +20,7 @@
         var storeName = "<p style='font-size=80pt'>" + "<b>" + first_name + "</b> <i>" + last_name + "</i>'s</p><p style='font-size=50pt'> Better Used Smartphone Store</p>";
         document.write(storeName);
         var over_half = false;
+        var ratio = hits/spins;
     </script>
 
     <p>
@@ -39,8 +40,8 @@
 
                 hits_spins_span.innerHTML = (hits_span.innerHTML/spins_span.innerHTML).toFixed(2);" 
 
-                if (hits/spins <= 0.5) {
-                    //over_half = false;
+                if (ratio <= 0.5) {
+                    over_half = false;
                     win_span.innerHTML = over_half; 
                 } else {
                     over_half = true;
@@ -58,6 +59,7 @@
 
                 hits_spins_span.innerHTML = (hits_span.innerHTML/spins_span.innerHTML).toFixed(2);
 
+                
                 ">
                 <h2>HTC</h2>
                 <p>&dollar;40.00</p>

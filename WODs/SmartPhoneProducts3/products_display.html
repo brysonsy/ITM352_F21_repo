@@ -12,12 +12,12 @@
     <h1>Used Smartphone Store</h1>
     <div><main>
     <script>
-        for (i = 1; eval("typeof name" + i) != 'undefined'; i++) {
+        for (i = 0; i < products.length; i++) {
         document.write(`
         <section class="item">
-        <h2>${eval('name' + i)}</h2>
-        <p>${eval('price' + i)}</p>
-        <img src="${eval('image' + i)}">
+        <h2>${products[i].brand}</h2>
+        <p>${products[i].price}</p>
+        <img src="${products[i].image}">
     </section>
         `);
     }

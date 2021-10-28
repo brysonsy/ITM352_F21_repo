@@ -1,0 +1,54 @@
+<script>
+
+    let params = (new URL(document.location)).searchParams;
+    GET = {};
+    params.forEach(function (value, key) {GET[key] = value})
+
+    function isNonNegInt(q, return_errors = false) {
+        var errors = []; // assume no errors at first
+        if(q=='') q = 0; // if text box is blank, show nothing
+        if (Number(q) != q) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
+        else {
+            if (q < 0) errors.push('<font color="red">Negative value!</font>'); // Check if it is non-negative
+            if (parseInt(q) != q) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
+        }
+        return return_errors ? errors : (errors.length == 0);
+    }
+
+    function checkQuantityTextbox(qtyTextboxObj) {
+        var errs = isNonNegInt(qtyTextboxObj.value, true);          // Check that quantity is not negative.
+        qty_textbox_message.innerHTML=errs.join('<font color="red">, </font>');
+    }
+
+    function displayPurchase() {
+        quantity_textbox = GET['quantity_textbox']
+        if(isNonNegInt(quantity_textbox.value)) {
+            document.body.innerHTML = `Thank you for ordering ${quantity_textbox.value} things.`
+        }
+        else checkQuantityTextbox();
+    }
+
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Page</title>
+</head>
+<body>
+    <form name="quantity_form" action="" method="GET">
+        <label>Quantity desired:</label>
+        <input name="quantity_textbox" type="text" placeholder="0" onkeyup="checkQuantityTextbox();">
+        <span id="qty_textbox_message">Enter a quantity</span>
+        <script>
+            if (params.has('quantity_textbox')) { quantity_form["quantity_textbox"].value = params.get('quantity_textbox'); checkQuantityTextbox(quantity_form["quantity_textbox"]); }
+ 
+        </script>
+        <br><input name="purchase_submit" type="submit" value="Purchase">
+       
+    </form>
+</body>
+</html>
+<script>

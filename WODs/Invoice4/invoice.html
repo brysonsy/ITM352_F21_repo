@@ -1,0 +1,191 @@
+<script>
+    /* Script to make an invoice */
+
+    function isNonNegInt(q, returnErrors=false) {
+    errors = []; // Assume no errors at first
+    if(Number(q) != q) errors.push('Not a number!'); // Check if string is a number value
+    if(q < 0) errors.push('Negative value!'); // Check if it is non-negative
+    if(parseInt(q) != q) errors.push('Not an integer!'); // Check that it is an integer
+    return returnErrors ? errors : (errors.length == 0);
+}
+
+function generate_item_rows(product_quantities_array) {
+    for (i = 0; i < product_quantities_array.length; i++) {
+        qty = product_quantities_array[i];
+        errs = isNonNegInt(qty, true);
+        if (qty == 0) {
+            continue;
+        } 
+        if (errs.length == 0) {
+            extended_price = qty * products[i].price;
+            subtotal = extended_price + subtotal;
+        } else {
+            qty = `<span style="color:red;">${qty}<br>${errs.join("<br>")}</span>`;
+        }
+        document.write(`
+                <tr>
+                    <td width="43%">${products[i].brand}</td>
+                    <td align="center" width="11%">${qty}</td>
+                    <td width="13%">$${products[i].price}</td>
+                    <td width="54%">$${extended_price}</td>
+                </tr>
+                `)
+    }
+}
+
+var products = [
+{
+brand : "HTC",
+price : 40.00,
+image : "http://dport96.github.io/ITM352/morea/080.flow-control-II/HTC.jpg",
+},
+{
+    brand : "Apple",
+    price : 75.00,
+    image : "http://dport96.github.io/ITM352/morea/080.flow-control-II/iphone-3gs.jpg",
+},
+{
+    brand : "Nokia",
+    price : 35.00,
+    image : "http://dport96.github.io/ITM352/morea/080.flow-control-II/Nokia.jpg",
+},
+{
+    brand : "Samsung",
+    price : 45.00,
+    image : "http://dport96.github.io/ITM352/morea/080.flow-control-II/Samsung.jpg",
+},
+{
+    brand : "Blackberry",
+    price : 10.00,
+    image : "http://dport96.github.io/ITM352/morea/080.flow-control-II/Blackberry.jpg",
+}];
+
+    quantities = [1,-1,2.1,-3.2,'cat'];
+
+    // Product 1
+    var item1 = 'Gillette Sensor 3 Razor';
+    var quantity1 = 2;
+    var price1 = 1.23;
+
+    // Product 1
+    var item2 = 'Barbasol Shaving Cream';
+    var quantity2 = 1;
+    var price2 = 2.64;
+
+    // Product 1
+    var item3 = 'Nautica Cologne';
+    var quantity3 = 1;
+    var price3 = 6.17;
+
+    // Product 1
+    var item4 = 'Rubbing Alcohol';
+    var quantity4 = 3;
+    var price4 = 0.98;
+
+    // Product 5
+    var item5 = 'Colgate Classic Toothbrush';
+    var quantity5 = 12;
+    var price5 = 1.89;
+
+    //Compute extended prices
+    var extended_price = 0;
+
+    // Compute subtotal
+    var subtotal = 0;
+
+    
+
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice4</title>
+</head>
+<body>
+    <table border="2">
+        <tbody>
+            <tr>
+                <th style="text-align: center;" width="43%">Item</th>
+                <th style="text-align: center;" width="11%">Quantity</th>
+                <th style="text-align: center;" width="13%">Price</th>
+                <th style="text-align: center;" width="54%">Extended Price</th>
+            </tr>
+
+            <script>
+    generate_item_rows(quantities)            
+
+
+    // Compute tax 
+    var tax_rate = 0.0575;
+    var tax_amount = tax_rate * subtotal;
+
+    // Compute shipping
+    if (subtotal <= 50) {
+        shipping = 2;
+    } else if (subtotal <= 100) {
+        shipping = 5;
+    } else {
+        shipping = 0.05 * subtotal;
+    }
+
+    // Compute grand total
+    var total = subtotal + tax_amount + shipping;
+
+            </script>
+
+            <tr>
+                <td colspan="4" width="100%">&nbsp;</td>
+            </tr>
+
+            <script>
+                //Subtotal Row
+                document.write(`
+                <tr>
+                    <td style="text-align: center;" colspan="3" width="67%">Subtotal</td>
+                    <td width="54%">$${subtotal}</td>
+                </tr>
+                `)
+                
+
+                //Tax Row
+                document.write(`
+                <tr>
+                    <td style="text-align: center;" colspan="3" width="67%">Tax @ ${100*tax_rate}%</td>
+                    <td width="54%">$${tax_amount.toFixed(2)}</td>
+                </tr>
+                `)
+
+                //Shipping row
+                document.write(`
+                <tr>
+                    <td style="text-align: center;" colspan="3" width="67%">Shipping</span></td>
+                    <td width="54%">$${shipping.toFixed(2)}</td>
+                </tr>
+                `)
+
+                //Total Row
+                document.write(`
+                <tr>
+                    <td style="text-align: center;" colspan="3" width="67%"><strong>Total</strong></td>
+                    <td width="54%"><strong>$${total.toFixed(2)}</strong></td>
+                </tr>
+                `)
+            </script>
+
+        </tbody>
+    </table>
+    <div>
+        <b>
+            OUR SHIPPING POLICY IS:
+            <li>A subtotal $0 - $49.99 will be $2 shipping</li>
+            <li>A subtotal $50 - $99.99 will be $5 shipping</li>
+            <li>Subtotals over $100 will be charged 5% of the subtotal amount</li>
+
+        </b>
+    </div>
+</body>
+</html>

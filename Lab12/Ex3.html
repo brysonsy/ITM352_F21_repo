@@ -27,9 +27,11 @@ function displayPurchase() {
     </script>
 </head>
 <body>
+    <form name="quantity_form" action="display_purchase.html" method="GET">
         <label>Quantity desired:</label>
-        <input id="quantity_textbox" type="text" onkeyup="checkQuantityTextbox()">
+        <input name="quantity_textbox" type="text" placeholder="0" onkeyup="checkQuantityTextbox();">
         <span id="qty_textbox_message">Enter a quantity</span>
-        <br><input type="submit" value="Purchase" onclick="displayPurchase();"></br>
+        <br><input name="purchase_submit" type="submit" value="Purchase"><br>
+    </form>
 </body>
 </html>

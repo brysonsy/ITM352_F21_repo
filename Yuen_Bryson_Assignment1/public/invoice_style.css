@@ -1,0 +1,16 @@
+body {
+    /* Background */
+    background: url("./images/background.jpg") ivory;
+}
+
+/* Button Styling */
+.button {
+    background-color: #6c706c;
+    border: none;
+    color: white;
+    padding: 12px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}

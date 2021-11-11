@@ -1,0 +1,68 @@
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    /* Gray border */
+    border: 1px solid #ddd;
+    /* Rounded border */
+    border-radius: 5px;
+    /* Set padding */
+    padding: 5px;
+    /* Set shadows */
+    box-shadow: 0 0 5px 1px black;
+}
+
+/* Aesthetics */
+#banner {
+    /* Background */
+    background-image: linear-gradient(to bottom right, turquoise, lightblue);
+}
+
+
+.item_display {
+    /* Set padding */
+    padding: 15px; 
+}
+
+.item_text {
+    /* Set padding */
+    padding: 25px;
+    justify-content: center;
+    background-image: linear-gradient(to bottom right, lightgrey, white);
+    width: 1000px;
+}
+
+p {
+    /* Set padding */
+    padding-bottom: 15px;
+}
+
+body {
+    /* Typography */  
+        /* Center text */
+        text-align: center;
+        /* Set font weight */
+        font-weight: 500;
+    /* Background */
+    background: url("./images/background.jpg") ivory no-repeat center center fixed;
+}
+
+/* Block styling */ 
+body >div {
+    border: 5px double black;
+    box-shadow: black;
+    display: flex;
+    justify-content: center; 
+}
+
+/* Button styling */
+/* Modified from https://www.w3schools.com/css/css3_buttons.asp */
+.button {
+    background-color: #6c706c;
+    border: none;
+    color: white;
+    padding: 12px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;

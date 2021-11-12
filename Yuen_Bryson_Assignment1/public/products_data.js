@@ -32,7 +32,7 @@ var products = [
     {
         "brand" : "Dusk Ball",
         "image" : "./images/duskball.png",
-        "price" : 12.50,
+        "price" : 12.00,
         "desc" : "A ball that works better in dark places or at night.",
         "quantity" : 12
     }

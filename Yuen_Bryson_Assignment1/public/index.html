@@ -20,7 +20,33 @@
         if (qtyTextbox.value.trim() == '') errs = ['Please type quantity desired: '];
         document.getElementById(qtyTextbox.name + '_label').innerHTML = errs.join('<font color="red">, </font>');
     }
-    
+    // Params and structure from Lab12
+    window.onload = function () {
+        let params = (new URL(document.location)).searchParams; // get the query string which has the form data
+        // After form is submitted, check to see if quantities are valid
+        if (params.has('purchase_submit')) {
+            has_errors = false; // assume quantities are valid from the start
+            total_qty = 0; // need to check if something was selected so we will look if the total > 0
+            for (i = 0; i < products.length; i++) {
+                if (params.has(`quantity${i}`)) {
+                    a_qty = params.get(`quantity${i}`);
+                    if(!isNonNegInt(a_qty)) {
+                        has_errors = true; // check to see if there are any errors
+                        checkQuantityTextbox(quantity_form[`quantity${i}`]);
+                    }
+                }
+            }
+            // Give an alert if there are any errors
+            if(has_errors) {
+                alert("Please enter only valid quantities!");
+            }
+            // If there are no errors and quantititys are OK, process invoice
+            else { 
+                window.location = `./invoice.html${document.location.search}`;
+                window.stop;
+            }
+        }
+    }
 
 </script>
 
@@ -39,7 +65,27 @@
     <div>
     <main>
         <form name="quantity_form" action="/process_purchase" method="POST">
-            
+            <input class="button" type="submit" value="Confirm Purchase" name="purchase_submit">
+            <script>
+            // Write products on page, write until products are undefined
+            // Setup form
+            for(i = 0; i < products.length; i++) {
+                document.write(`
+                    <section class="item_display"><br><img src="${products[i].image}" align="left"></br></section>
+                    <section class="item_text">
+                        <p>
+                            <br><h2>${products[i].brand}</h2></br>
+                            <br>${products[i].desc}</br>
+                            <br><b>$${products[i].price}</b></br>
+                            <br>
+                                <label id="quantity${i}_label">Please type quantity desired: </label>
+                                <input type="text" placeholder="Quantity Available: ${products[i].quantity}" name="quantity${i}" onkeyup="checkQuantityTextbox(this);">
+                            </br>
+                        </p>
+                    </section>
+                `)
+            }
+            </script>
         </form>
     </main>    
     </div>

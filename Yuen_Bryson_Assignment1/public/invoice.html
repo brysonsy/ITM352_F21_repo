@@ -47,6 +47,7 @@ var quantities = [];
                 if (quantities[i] > 0) { // Setup conditionals
                     extended_price = quantities[i] * products[i].price // Compute extended price
                     subtotal = extended_price + subtotal; // Add subtotal back to itself
+                    // Create table
                     document.write(` 
                         <tr>
                             <td width="43%">${products[i].brand}</td>

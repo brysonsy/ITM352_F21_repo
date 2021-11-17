@@ -2,15 +2,15 @@ var express = require('express');
 var app = express();
 
 // Routing 
-
 // monitor all requests
-app.all('*', function (request, response, next) {
-   console.log(request.method + ' to ' + request.path);
-   next();
-});
 
 // process purchase request (validate quantities, check quantity available)
-<** your code here ***>
+app.get('/invoice.html', function(req, res, next) {
+    if(typeof req.query['purchase_submit'] != 'undefined') {
+        console.log(Date.now() + ': Purchase made from ip ' + req.ip + ' data: ' + JSON.stringify(req.query));
+    }
+    next();
+});
 
 // route all other GET requests to files in public 
 app.use(express.static('./public'));

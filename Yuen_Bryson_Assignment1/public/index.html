@@ -1,6 +1,7 @@
 <!-- Load product data -->
 <script src="./products_data.js" type="text/javascript"></script>
 <script>
+    //Borrowed from Lab 12
     // Check to see if the quantity input is valid
     function isNonNegInt(q, return_errors = false) {
         var errors = []; // assume no errors at first
@@ -13,6 +14,7 @@
         return return_errors ? errors : (errors.length == 0);
     }
 
+    // From Assignment 1 Example
     // Check the quantity that is input in the textbox
     function checkQuantityTextbox(qtyTextbox) {
         errs = isNonNegInt(qtyTextbox.value, true);

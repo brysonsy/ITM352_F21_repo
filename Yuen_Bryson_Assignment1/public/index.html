@@ -1,4 +1,6 @@
 <!-- Home page containing products -->
+<!-- Author: Bryson Yuen -->
+<!-- Worked with Sean Sumida -->
 
 <!-- Load product data -->
 <script src="./products_data.js" type="text/javascript"></script>
@@ -11,7 +13,7 @@
         else {
             if (q < 0) errors.push('<font color="red">Please input a positive quantity </font>'); // Check if it is non-negative
             if (parseInt(q) != q) errors.push('<font color="red">Please input a whole number </font>'); // Check that it is an integer
-            if (q > 100) errors.push('<font color="red">We do not have enough stock </font>')
+            if (q > 100) errors.push('<font color="red">We do not have enough stock </font>') // Checks the quantity available 
         }
         return return_errors ? errors : (errors.length == 0);
     }

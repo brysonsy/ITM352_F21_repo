@@ -1,4 +1,5 @@
 // File to validate purchase with necessary requirements.
+// Author: Bryson Yuen
 // Worked with Sean Sumida
 
 var express = require('express');

@@ -11,6 +11,7 @@
         else {
             if (q < 0) errors.push('<font color="red">Please input a positive quantity </font>'); // Check if it is non-negative
             if (parseInt(q) != q) errors.push('<font color="red">Please input a whole number </font>'); // Check that it is an integer
+            if (q > 100) errors.push('<font color="red">We do not have enough stock </font>')
         }
         return return_errors ? errors : (errors.length == 0);
     }
@@ -41,7 +42,7 @@
             // Give an alert if there are any errors
             if(has_errors) {
                 alert("Please enter only valid quantities!");
-            } 
+            }
             // If there are no errors and quantititys are OK, process invoice
             else { 
                 window.location = `./invoice.html${document.location.search}`;

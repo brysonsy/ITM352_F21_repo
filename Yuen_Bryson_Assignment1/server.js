@@ -28,23 +28,7 @@ app.post('/purchase', function (request, response, next) {
 
    var errors = {};
    // Assumes no quantities from the start so we have no errors
-   errors['no quantities'] = 'Please enter some quantities';
-
-   // Loops through all the products
-   let overQuantity = false;
-   for (i = 0; i < products_array.length; i++) {
-      let quantityAvailable = products_array[i].quantity;
-      if(typeof POST[`quantity${i}`] != 'undefined') {
-         a_qty = Number(POST[`quantity${i}`]);
-         if (a_qty > quantityAvailable) { 
-            overQuantity = true;
-         }
-      }
-   }
-
-   if (overQuantity = true) {
-      errors['over quantity'] = 'Please'
-   }
+   errors['no quantities'] = 'Please enter some quantities'
 
    // Strings the query
    QString = qs.stringify(POST);

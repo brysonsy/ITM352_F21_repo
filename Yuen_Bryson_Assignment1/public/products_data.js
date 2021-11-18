@@ -37,3 +37,6 @@ var products = [
         "quantity" : 12
     }
 ];
+if(typeof exports != 'undefined') { // try to export this file to server.js
+    exports.products = products;
+    }

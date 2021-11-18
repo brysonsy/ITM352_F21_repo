@@ -1,53 +1,18 @@
+// File to validate purchase with necessary requirements.
+// Worked with Sean Sumida
+
 var express = require('express');
 var app = express();
+var myParser = require("body-parser");
 const qs = require('querystring');
-const { type } = require('os');
 var products_array = require('./public/products_data.js');
 
 // Routing 
-
-// monitor all requests
+// Monitor all requests
 app.all('*', function (request, response, next) {
    console.log(request.method + ' to ' + request.path);
    next();
 });
-
-// process purchase request (validate quantities, check quantity available)
-app.use(express.urlencoded({ "extended": true }));
-
-app.post('/purchase', function (request, response, next) {
-   // Checks if all the quantities are valid, while looping through products to find errors
-   var errors = {};
-   var qty = request.body['quantitybox'];
-   console.log(qty + typeof qty);
-   // found in A1 workshop; used for 
-   for (i in products_array) {
-      var q = qty[i];
-      let name = products_array[i].name;
-      let name_price = products_array[i].price;
-      console.log(q);
-      // check if nonnegint
-
-      // checkif quantity wanted is avalable
-
-      // check if at least 1 quantity 
-
-   }
-
-   var qstring = qs.stringify(request.body);
-   // if no errors, send to invoivce.html with quanity data in querystring, otherwsie back to products_display.html
-   if (Object.keys(errors).length == 0) {
-      response.redirect('./invoice.html?' + qstring);
-      //    var quantity_data_num = parseInt(q);
-
-   } else {
-      response.redirect('./products_display.html?' + qstring);
-   }
-
-})
-
-// route all other GET requests to files in public 
-app.use(express.static('./public'));
 
 app.get("/products.js", function (request, response, next) {
    response.type('.js');
@@ -55,7 +20,47 @@ app.get("/products.js", function (request, response, next) {
    response.send(products_str);
 });
 
-// start server
+app.use(express.urlencoded({ "extended": true }));
+
+// process purchase request (validate quantities, check quantity available)
+app.post('/purchase', function (request, response, next) {
+   let POST = request.body;
+
+   var errors = {};
+   // Assumes no quantities from the start so we have no errors
+   errors['no quantities'] = 'Please enter some quantities';
+
+   // Loops through all the products
+   let overQuantity = false;
+   for (i = 0; i < products_array.length; i++) {
+      let quantityAvailable = products_array[i].quantity;
+      if(typeof POST[`quantity${i}`] != 'undefined') {
+         a_qty = Number(POST[`quantity${i}`]);
+         if (a_qty > quantityAvailable) { 
+            overQuantity = true;
+         }
+      }
+   }
+
+   if (overQuantity = true) {
+      errors['over quantity'] = 'Please'
+   }
+
+   // Strings the query
+   QString = qs.stringify(POST);
+   if (JSON.stringify(errors) === '{}') {
+       response.redirect("./invoice.html?" + QString); // If valid, redirect to invoice
+   } else {
+       let errObj = { 'error': JSON.stringify(errors) }; // Show the errors
+       QString += '&' + qs.stringify(errObj);
+       response.redirect("./index.html?" + QString); // If invalid, send back to index
+   }
+});
+
+// Route all other GET requests to files in public 
+app.use(express.static('./public'));
+
+// Start server
 app.listen(8080, () => console.log(`listening on port 8080`));
  
 // From Lab 13 Check to see if the quantity input is valid

@@ -1,3 +1,5 @@
+<!-- Page dedicated to the invoice for the customer -->
+
 <!-- Load product data -->
 <script src="./products_data.js" type="text/javascript"></script>
 <!-- Script is designed to present an invoice -->
@@ -14,6 +16,8 @@ var quantities = [];
                 quantities[i] = a_qty;
             }
         }
+    } else {
+        document.write('no form submitted');
     }
 </script>
 

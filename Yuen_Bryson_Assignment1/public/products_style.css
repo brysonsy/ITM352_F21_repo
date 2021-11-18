@@ -1,3 +1,9 @@
+/* Aesthetics */
+#banner {
+    /* Background */
+    background-image: linear-gradient(to bottom right, turquoise, lightblue);
+}
+
 /* Images */
 img {
     width: 300px;
@@ -13,13 +19,6 @@ img {
     box-shadow: 0 0 5px 1px black;
 }
 
-/* Aesthetics */
-#banner {
-    /* Background */
-    background-image: linear-gradient(to bottom right, turquoise, lightblue);
-}
-
-
 .item_display {
     /* Set padding */
     padding: 15px; 
@@ -31,6 +30,18 @@ img {
     justify-content: center;
     background-image: linear-gradient(to bottom right, lightgrey, white);
     width: 1000px;
+}
+
+/* Button styling */
+.button {
+    background-color: #6c706c;
+    border: none;
+    color: white;
+    padding: 12px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
 }
 
 p {
@@ -54,16 +65,4 @@ body >div {
     box-shadow: black;
     display: flex;
     justify-content: center; 
-}
-
-/* Button styling */
-.button {
-    background-color: #6c706c;
-    border: none;
-    color: white;
-    padding: 12px 28px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
 }

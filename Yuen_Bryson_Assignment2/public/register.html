@@ -1,0 +1,65 @@
+<!-- Register page, modified and borrowed Lab 14 and template from ww3schools.com -->
+<!-- Author: Bryson Yuen -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+<script>
+    // Borrowed and modified code from Lab 14
+        // Tells user if there is an error in username or password
+        let params = (new URL(document.location)).searchParams;
+        window.onload = function () {
+            if (params.has('errors')) {
+                console.log("invalid");
+                alert('Fix the following errors: \n' + params.get('errors'));
+                Register["fullname"].value=params.get("fullname");
+                Register["username"].value=params.get("username");
+                Register["email"].value=params.get("email");
+            }
+        }    
+</script>
+
+<style>
+/* Register Page Background */
+html { 
+        background-image: url(./images/background.jpg); 
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+</style>
+</head>
+<body>
+    <h1>Register a Poke Mart Account</h1>
+    <p>To shop and purchase products please register to become a member!</p>
+<!--Creates form for new users to make an account--> 
+<!--Borrowed and modified code from Lab 14-->
+<div id='account'>
+    <form method="POST" action="process_register" name="Register">
+    <div class="container">
+        <input type="text" id="fullname" name="fullname" size="40" pattern="[a-zA-Z]+[ ]+[a-zA-Z]+" placeholder="Enter Full Name" required title="Use only letters for your full name."><br />
+
+        <input type="text" id="username" name="username" size="40" pattern=".[a-z0-9]{3,10}$" placeholder="Enter Username" required title="Min: 4 Characters, Max: 10 Characters, Numbers & Letters Only."><br />
+            <!--Range minimum had to be 3 in order for the minimum to be 4-->
+
+        <input type="email" id="email" name="email" size="40" pattern="[a-z0-9._]+@[a-z0-9]+\.[a-z]{2,}$" placeholder="Enter Email" required title="Please enter a valid email using the format, xxx@yyy.zzz"><br />
+
+        <input type="password" id="password" name="password" size="40" pattern=".{6,}" placeholder="Enter Password" required title="6 Characters Minimum."><br />
+
+        <input type="password" id="repeat_password" name="repeat_password" size="40" pattern=".{6,}" placeholder="Repeat Password" required title="Password must be the same as above."><br />
+
+        <input type="submit" value="Register" class="btn">
+    </div>
+    </form>
+    <script>
+        Register.action += document.location.search; // Saves the query string from the products _display.html for my invoice.html
+    </script>
+</div>
+<!--Button for Users who have an existing account-->
+<input type="button" name="olduser" value="For Users With Existing Accounts" class="btn2" onclick="window.location='./login.html' + document.location.search;">
+</body>
+</html>

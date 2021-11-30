@@ -1,0 +1,47 @@
+<!-- Login page, modified and borrowed Lab 14 and template from ww3schools.com -->
+<!-- Author: Bryson Yuen -->
+
+<!-- Loads user data -->
+<script src="./user_data.json" type="json"></script> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+    /* Login Page Background */
+        html { 
+            background-image: url(./images/background.jpg); 
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Poke Mart Login Page</h1>
+        <p>To shop and purchase products please login or register to become a member!</p>
+        <!--Makes form to login user-->
+        <form name="login" action="process_login" method="POST">
+            <div class="container"><br>
+                <!--Creates a textbox to enter username-->
+                <input type="text" name="username" id="username" size="40" placeholder="Enter Username" required><br>
+
+                <!--Creates a textbox to enter password-->
+                <input type="password" name="password" size="40" placeholder="Enter Password" onkeyup="" required><br>
+
+                <!--Creates a button to login-->
+                <br><input type="submit" value="Login" name="login" class='btn'>
+                </div>
+            </form>
+        <script> 
+            // Saves query string from products page for the invoice
+            login.action += document.location.search; 
+         </script>
+    <!--Button for Users who need to create an account-->
+    <input type="button" name="newuser" value="New Users Register Here" class="btn2"
+    onclick="window.location='./register.html' + document.location.search;">
+</body>
+</html>

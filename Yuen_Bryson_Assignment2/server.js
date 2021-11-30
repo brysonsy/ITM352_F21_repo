@@ -1,27 +1,83 @@
-// File to validate purchase with necessary requirements.
-// Author: Bryson Yuen
-// Worked with Sean Sumida
+/*
+Author: Bryson Yuen
+Worked with Sean Sumida
+Program based off of Assignment1, Lab13, and Lab14
+*/
 
-var express = require('express');
-var app = express();
-var myParser = require("body-parser");
-const qs = require('querystring');
-var products_array = require('./public/products_data.js');
+// Setup Server
+var data = require('./public/product_data.js'); // Links product_data.js and sets it as var data
+var products = data.products; // Loads product_data.js as var products
+const qs = require('qs'); // Use var qs as loaded module
+var express = require('express'); // Loads express module
+var app = express(); // Places express module in variable app
+var myParser = require("body-parser"); // Loads body-parser module
+var fs = require('fs'); // Starts and loads fs systems
 
-// Routing 
-// Monitor all requests
-app.all('*', function (request, response, next) {
-   console.log(request.method + ' to ' + request.path);
-   next();
+var filename = 'user_data.json'; // Makes a var with the filename user_data.json
+const{request} = require('express');
+
+// Links to request POST
+app.all('*', function (req, res, next) { 
+    console.log(req.method + ' to ' + req.path);
+    next();
 });
 
-app.get("/products.js", function (request, response, next) {
+/* app.get("/products.js", function (request, response, next) {
    response.type('.js');
    var products_str = `var products_array = ${JSON.stringify(products_array)};`;
    response.send(products_str);
+}); */
+
+// Gets data from body
+app.use(express.urlencoded({ "extended": true }));
+
+// Borrowed and modified code from Lab14
+if(fs.existsSync(filename)) {
+   // Loads user_data file to user_data object
+   fileStats = fs.statSync(filename)
+   // Outputs in terminal the characters/size of the user_data file
+   console.log(filename + ' has ' + fileStats.size + ' characters.');
+   data = fs.readFileSync(filename, 'utf-8');
+   user_data = JSON.parse(data);
+} else {
+   console.log(filename + ' does not exist.');
+}
+
+// Process Login
+// Borrowed and modified code from Lab14
+app.post("/process_login", function (req, res, next) {
+   var LogError = [];
+   console.log(req.query);
+   username = req.body.username.toLowerCase(); // Usernames are changed to lowercase
+       if (typeof user_data[username] != 'undefined') { // Username and password should not be undefined
+       if (user_data[username].password == req.body.password) {
+           req.query.username = username;
+           console.log(user_data[req.query.username].name);
+           req.query.fullname = user_data[req.query.username].name;
+           res.redirect('/invoice.html?' + qs.stringify(req.query)); // Redirects to invoice if the username and password is correct
+           return; 
+       }  
+       else { // If password is incorrect displays Invalid Password in console
+           LogError.push = ('Invalid Password');
+           console.log(LogError);
+           req.query.username= username;
+           req.query.name= user_data[username].name;
+           req.query.LogError=LogError.join(';');
+       }   
+       } else { // If username is incorrect displays Invalid Username in console
+           LogError.push = ('Invalid Username');
+           console.log(LogError);
+           req.query.username= username;
+           req.query.LogError=LogError.join(';');
+       }
+   res.redirect('./login.html?' + qs.stringify(req.query)); // If there is an error, remain on login page
 });
 
-app.use(express.urlencoded({ "extended": true }));
+// Process Registration
+// Borrowed and modified from Lab 14
+
+
+
 
 // process purchase request (validate quantities, check quantity available)
 app.post('/purchase', function (request, response, next) {

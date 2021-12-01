@@ -9,18 +9,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Page</title>
 <script>
-    // Borrowed and modified code from Lab 14
-        // Tells user if there is an error in username or password
+    //display alert as a response when for loops from server.js are executed depending on the quantity inserted
+    window.onload = function () {
         let params = (new URL(document.location)).searchParams;
-        window.onload = function () {
-            if (params.has('errors')) {
-                console.log("invalid");
-                alert('Fix the following errors: \n' + params.get('errors'));
-                Register["fullname"].value=params.get("fullname");
-                Register["username"].value=params.get("username");
-                Register["email"].value=params.get("email");
-            }
-        }    
+        //if errorMessage is in qry string then put up alert with error message
+        if (params.has("loginMessage")) {
+            alert(params.get("loginMessage"));
+        }
+    }
 </script>
 
 <style>
@@ -63,3 +59,16 @@ html {
 <input type="button" name="olduser" value="For Users With Existing Accounts" class="btn2" onclick="window.location='./login.html' + document.location.search;">
 </body>
 </html>
+<script>
+    let params = (new URL(document.location)).searchParams;
+    if (params.has('errors_obj')) {
+        //convert string to json string to object
+        var errors = JSON.parse(params.get('errors_obj'));
+        for(err in errors) { 
+            // put the error messages in the span for the element where the error occured
+            document.getElementById(`${err}_errors`).innerHTML = errors[err].join('<br>');
+            // put value back in textbox (make sticky)
+            document.getElementById(err).value = params.get(err);
+        }   
+    }
+</script>

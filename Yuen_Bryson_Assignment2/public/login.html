@@ -43,5 +43,21 @@
     <!--Button for Users who need to create an account-->
     <input type="button" name="newuser" value="New Users Register Here" class="btn2"
     onclick="window.location='./register.html' + document.location.search;">
+
+    <script>
+        //display alert as a response when for loops from server.js are executed depending on the quantity inserted 
+        window.onload = function () {
+            let params = (new URL(document.location)).searchParams;
+            // If there is an error put up an alert
+            if (params.has("loginMessage")) {
+                alert(params.get("loginMessage"));
+            }
+            // Username is stick if password is input wrong
+            if (params.has('wrong_pass')) {
+                //username_tag is the ID of username box
+                username.value = params.get('wrong_pass')
+            }
+        }
+    </script>
 </body>
 </html>

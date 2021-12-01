@@ -4,23 +4,37 @@
 
 <!-- Load product data -->
 <script src="./products_data.js" type="text/javascript"></script>
+<!-- Load user data -->
+<script src="./user_data.json" type="json"></script> 
 <!-- Script is designed to present an invoice -->
-<script>
-// params variable from Lab12
-let params = (new URL(document.location)).searchParams;
-var quantities = [];
 
+<script>
+// Borrowed and modified from Lab12
+// User cannot go to invoice until they are logged in
+let params = (new URL(document.location)).searchParams; 
+  if (params.has('username') == false) { // Checks if the user has logged in or registered
+    alert('Please log in or register first!');
+    // Redirect to product display with error message if not logged in or registered
+    location.href = './products_display.html'; 
+    window.stop;
+  }
+
+  var quantities = [];
+  var user_data = './user_data.json';
+  
     // Process the invoice
     if (params.has('purchase_submit')) {
-        for (i = 0; i < products.length; i++) {
-            if (params.has(`quantity${i}`)) {
-                a_qty = params.get(`quantity${i}`);
-                quantities[i] = a_qty;
-            }
-        }
-    } else {
-        document.write('no form submitted');
+    for (i = 0; i < products_array.length; i++) {
+      if (params.has(`quantity${i}`)) {
+        execute_quantity = params.get(`quantity${i}`);
+        quantities[i] = execute_quantity;
+      }
     }
+  } else {
+    // Error when entered without a submit
+    document.write('Invalid Invoice'); 
+  }
+  console.log(quantities);
 </script>
 
 <!DOCTYPE html>
@@ -56,7 +70,7 @@ var quantities = [];
                     // Create table
                     document.write(` 
                         <tr>
-                            <td width="43%">${products[i].brand}</td>
+                            <td width="43%">${products[i].name}</td>
                             <td align="center" width="11%">${quantities[i]}</td>
                             <td width="13%">$${products[i].price}</td>
                             <td width="54%">$${extended_price.toFixed(2)}</td>
@@ -67,7 +81,7 @@ var quantities = [];
             
             // Compute tax
             var tax_rate = 0.04712
-            var tax_amount = tax_rate*subtotal;
+            var tax_amount = tax_rate * subtotal;
     
             // Compute shipping
             if(subtotal <= 50) {
@@ -135,5 +149,18 @@ var quantities = [];
       <li>Subtotals over $100 will be charged 5% of the subtotal amount.</li>
     </p></b></div>
     <input type="button" class="button" value="Back to Home" onclick="window.location.href = 'index.html';">
+    <script>
+        //display alert as a response when for loops from server.js are executed depending on the quantity inserted
+        window.onload = function () {
+          let params = (new URL(document.location)).searchParams;
+          //if errorMessage is in qry string then put up alert with error message
+          if (params.has("loginMessage")) {
+            alert(params.get("loginMessage"));
+    
+    
+          }
+        }
+    
+      </script>
     </body>
 </html>

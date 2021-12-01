@@ -5,8 +5,8 @@ Program based off of Assignment1, Lab13, and Lab14
 */
 
 // Setup Server
-var data = require('./public/product_data.js'); // Links product_data.js and sets it as var data
-var products = data.products; // Loads product_data.js as var products
+var data = require('./public/products_data.js'); // Links products_data.js and sets it as var data
+var products = data.products; // Loads products_data.js as var products
 const qs = require('qs'); // Use var qs as loaded module
 var express = require('express'); // Loads express module
 var app = express(); // Places express module in variable app
@@ -75,8 +75,74 @@ app.post("/process_login", function (req, res, next) {
 
 // Process Registration
 // Borrowed and modified from Lab 14
+app.post("/process_register", function (req, res) {
+   qstr = req.body
+   console.log(qstr);
+   var errors = [];
+       if (/^[A-Za-z]+$/.test(req.body.name)) { // Only allows letters to be used for full names
+       }
+       else {
+           errors.push('Use Only Letters for Full Name')
+       }
+       // Validate whether or not it is a full name
+       if (req.body.name == "") {
+           errors.push('Invalid Full Name');
+       }
+// Full name character length should be between 0 and 30 
+       if ((req.body.fullname.length > 30 && req.body.fullname.length <0)) {
+           errors.push('Full Name Too Long')
+       }
+// Checks the new username in lowercase across other usernames
+   var userreg = req.body.username.toLowerCase(); 
+       if (typeof user_data[userreg] != 'undefined') { // Gives error if username is taken and displays message 'Username taken'
+           errors.push('Username taken')
+       }
+       // Requires usernames to be letters and numbers 
+       if (/^[0-9a-zA-Z]+$/.test(req.body.username)) {
+       }
+       else {
+           errors.push('Letters And Numbers Only for Username')
+       }
 
+// Email Validation
+// Borrowed and modified from Lab 14
+// Will retain query string with order quantities if the user registers a new account from login page.
+    // Password minimum is 6 characters
+    if (req.body.password.length < 6) {
+      errors.push('Password Minimum 6 Characters')
+  }
+  // Checks if password was entered correctly in both textboxes 
+  if (req.body.password !== req.body.repeat_password) { 
+      errors.push('Password Not a Match')
+  }
 
+// Borrowed and modified from Lab 14
+// If no errors are present then the username is saved
+// Fullname, username, and email are made sticky so user does not have to retype in case of an error
+req.query.fullname = req.body.fullname;
+req.query.username = req.body.username;
+req.query.email = req.body.email; 
+  if (errors.length == 0) {
+      console.log('no errors')
+      var username = req.body.username;
+      user_data[username] = {}; // Registers user's info.
+      user_data[username].name = req.body.fullname;
+      user_data[username].password= req.body.password; 
+      user_data[username].email = req.body.email; 
+      data = JSON.stringify(user_data);  // Set user's info
+      fs.writeFileSync(filename, data, "utf-8");
+      res.redirect('./invoice.html?' + qs.stringify(req.query));
+  }
+
+// Borrowed and modified from Lab 14
+// If errors are present redirects to register page and logs the error
+  else {
+      console.log(errors)
+// Redirects to registration page in the case of an error
+req.query.errors = errors.join(';');
+res.redirect('register.html?' + qs.stringify(req.query));
+}
+});
 
 
 // process purchase request (validate quantities, check quantity available)

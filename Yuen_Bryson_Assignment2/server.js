@@ -1,6 +1,5 @@
 /*
-Author: Bryson Yuen
-Worked with Sean Sumida
+Author: Sean Sumida & Bryson Yuen
 Program based off of Assignment1, Lab13, and Lab14
 */
 
@@ -54,7 +53,7 @@ app.post('/purchase', function (request, response, next) {
         q = POST['quantity' + i];
         // If the quantity is invalid
         if (isNonNegInt(q) == false) {
-            errors['invalid_quantity' + i] = `${q} ${products_array[i].name} is not a valid quantity`;
+            errors['invalid_quantity' + i] = `${q} ${products_array[i].name} is not a valid input`;
         }
         // If quantity is greater than 0
         if (q > 0) {
@@ -62,12 +61,12 @@ app.post('/purchase', function (request, response, next) {
         }
         // If quantity input is greater than quantity available
         if (q > products_array[i].quantity_available) {
-            errors['quantity_available' + i] = `${q} of ${products_array[i].name} is not available. Only ${products_array[i].quantity_available} available.`;
+            errors['quantity_available' + i] = `${q} of ${products_array[i].name} is not available. Only ${products_array[i].quantity_available} are available.`;
         }
     }
     // No quantities were selected
     if (randomValue == false) {
-        errors['no_quantities'] = `You need to select some quantities!`;
+        errors['no_quantities'] = `You need to order something.`;
     }
     // If no errors go to invoice, if errors go back to products
     if (Object.keys(errors).length == 0) {
@@ -130,19 +129,11 @@ app.post("/process_login", function (request, response) {
         console.log(errors);
         request.query.username = username;
     }
-    
-    //make username sticky when there's an error
-    //redirect to invoice with message
     response.redirect(`./login.html?loginMessage=${incorrectLogin_str}&wrong_pass=${username}`);
-
-    //query string before wrong_pass in case of errors
-    //response.redirect(`./login.html?loginMessage=${incorrectLogin_str}&` + qString);
 });
-
 // Process Registration
 app.post("/process_register", function (request, response) {
     console.log(request.body);
-    // Empty variable for errors
     var errors = {};
     var loginMessage_str = '';
     var register_user = request.body.username.toLowerCase();
@@ -153,46 +144,55 @@ app.post("/process_register", function (request, response) {
     errors['password'] = [];
     errors['repeat_password'] = [];
 
-    // Limits to letters only
+    // Limits characters to only letters
     if (/^[A-Za-z]+ [A-Za-z]+$/.test(request.body.name)) {
     }
-    // Error message when format isn't followed
+    // Error when a guideline are not followed
     else {
-        errors['name'].push('Please follow the format for names! (ex. Bryson Yuen)');
+        errors['name'].push('Please follow the format for names! (ex. Rick Kazman)');
     }
-    // Error message when name textbox is empty
+
+    // Error message when the name is empty
     if (request.body.name == "") {
-        errors['name'].push('The name textbox is empty. Please insert a name.');
+        errors['name'].push('The name is invalid. Please insert a name.');
     }
-    // Full names should be letters with max characters being 30, error if name is above 30 characters
+
+    // Users full name should only allow letters and no more than 30 characters
     if (request.body.name.length > 30) { 
+        // Errors if the name surpassed limit
         errors['name'].push('Name is too long. Insert a name less than 30 characters.');
     }
+
     // Error if username is already taken
     if (typeof users_reg_data[register_user] != 'undefined') { 
         errors['username'].push('Username is taken.');
     }
-    // Limits username to letters and numbers
+
+    // Limits characters to only letters and numbers 
     if (/^[0-9a-zA-Z]+$/.test(request.body.username)) {
     }
     else {
         errors['username'].push('Use only letters and numbers for your username.');
     }
-    // Makes usernames fall between 4 characters and 10 characters
-    if (request.body.username.length < 4 || request.body.username.length > 10) {
+
+    // Makes username a minimum of 4 characters and max of 10
+    if (request.body.username.length > 10 || request.body.username.length < 4) {
         errors['username'].push('Your username must contain 4-10 characters.');
     }
-    // Used w3 resources for email validation
+
+    // Email limitations used from w3 schools
     if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(request.body.email)) {
     }
     else {
-        errors['email'].push('Please use a valid format email format (ex. tinavo@gmail.com)');
+        errors['email'].push('Please use a valid format email format (ex. kazman@hawaii.edu)');
     }
-    // Makes password be atleast 6 characters
+
+    // Makes password a minimum of six characters
     if (request.body.password.length < 6) {
-        errors['password'].push('Your password is too short (Please use at least 6 characters).');
+        errors['password'].push('Your password is too short, please use at least 6 characters.');
     }
-    // Checks if passwords match
+
+    // Check to see if the passwords are the same
     if (request.body.password != request.body.repeat_password) {
         errors['repeat_password'].push('Your password does not match.');
     }
@@ -202,40 +202,46 @@ app.post("/process_register", function (request, response) {
       request.query.username = request.body.username;
       request.query.email = request.body.email;
 
-    // If there are no errors, save user info
+
+    // If there are no errors save info
     var num_errors = 0;
     for (err in errors) {
         num_errors += errors[err].length;
     }
     if (num_errors == 0) {
         POST = request.body;
+        
+        // Saves user info if there are no errors
         var username = POST["username"];
         users_reg_data[username] = {};
         users_reg_data[username].name = request.body.name;
         users_reg_data[username].password = request.body.password;
         users_reg_data[username].email = request.body.email;
 
-        // Stringifies user information
+        // Stringify user's information
         data = JSON.stringify(users_reg_data); 
         fs.writeFileSync(user_data, data, "utf-8");
         request.query.name = users_reg_data[request.query.username].name; 
-        request.query.email = users_reg_data[request.query.username].email;
-        let more_qString = querystring.stringify(request.query); 
-        // Redirects to invoice with the message
+        request.query.email = users_reg_data[request.query.username].email; 
+        let more_qString = querystring.stringify(request.query);
+
+        // Displays a message after successful registration
         loginMessage_str = `Welcome ${username}, you are registered!`;
+        // Redirects to invoice with message
         response.redirect(`./invoice.html?loginMessage=${loginMessage_str}&` + qString + '&' + more_qString);
+
         console.log(POST, "account information");
     }
     // Checks for errors
     else {
         console.log('in post register', errors, request.body)
-        //errors object for error message (search params)
         request.body.errors_obj = JSON.stringify(errors);
-        // Make sticky
+        
+        // Makes sticky 
         request.query.StickyUsername = register_user.username;
         request.query.StickyName = register_user.name;
         request.query.StickyEmail = register_user.email;
-        // Redirects to register html
+        // Redirect to register.html
         response.redirect("./register.html?" + querystring.stringify(request.body)); 
 
     }
@@ -246,7 +252,7 @@ app.listen(8080, () => console.log(`listening on port 8080`));
 
 // Borrowed and modified from Lab 13
 function isNonNegInt(q, returnErrors = false) {
-    errors = []; // assume no errors at first
+    errors = []; // Assume no errors at first
     if (q == '') q = 0;
     if (Number(q) != q) errors.push('Not a number!'); // Check if string is a number value
     else {

@@ -1,0 +1,119 @@
+<!-- Login page, modified and borrowed Lab 14 and template from ww3schools.com -->
+<!-- Author: Sean Sumida & Bryson Yuen -->
+
+<!-- Loads user data -->
+<script src="./user_data.json" type="json"></script> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+    /* Login Page Background */
+        html { 
+            background-image: url(./images/background.jpg); 
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+        }
+        .container{
+           text-align: center;
+            overflow: auto;
+            background-color: whitesmoke;
+            margin-left: 30%;
+            margin-right: 30%;
+            padding-bottom: 20px;
+            border-radius: 5px;
+        }
+        /* button and input field from w3 schools */
+       .btn{
+            background-color: #3edfdf;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            margin-left: 30%;
+            margin-right: 30%;
+            border: none;
+            cursor: pointer;
+            width: 40%;
+            border-radius: 5px;
+       }
+        .btn:hover {
+            opacity: 0.8;
+        }
+        .btn2{
+            background-color: #ff7477;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            margin-left: 30%;
+            margin-right: 30%;
+            width: 40%;
+            border-radius: 5px;
+
+       }
+        .btn2:hover {
+            opacity: 0.8;
+        }
+        input[type=text] {
+            width: 90%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            background-color: whitesmoke;
+            border: none;
+            border-bottom: 2px solid black;
+        }
+        input[type=password] {
+            width: 90%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            background-color: whitesmoke;
+            border: none;
+            border-bottom: 2px solid black;
+        }
+    </style>
+    <script>
+        // Displays an alert
+        window.onload = function () {
+            let params = (new URL(document.location)).searchParams;
+            // If there is an error put up an alert
+            if (params.has("loginMessage")) {
+                alert(params.get("loginMessage"));
+            }
+            // Username stays if password is input wrong
+            if (params.has('wrong_pass')) {
+                username.value = params.get('wrong_pass')
+            }
+        }
+    </script>
+</head>
+<body> 
+        <!--Makes form to login user-->
+        <form name="login" action="process_login" method="POST">
+            <div class="container"><br>
+                <h1>Poke Mart Login Page</h1>
+        <p>To shop and purchase products please login or register to become a member!</p>
+                <!--Creates a textbox to enter username-->
+                <input type="text" name="username" id="username" size="40" placeholder="Enter Username" required><br>
+
+                <!--Creates a textbox to enter password-->
+                <input type="password" name="password" size="40" placeholder="Enter Password" onkeyup="" required><br>
+                <!--Creates a button to login-->
+                <br><input type="submit" value="Login" name="login" class='btn'>
+                </div>
+                
+                 <!--Button for Users who need to create an account-->
+    <input type="button" name="newuser" value="New Users Register Here" class="btn2"
+    onclick="window.location='./register.html' + document.location.search;">
+            </form>
+        <script> 
+            // Saves query string from products page for the invoice
+            login.action += document.location.search; 
+         </script>
+</body>
+</html>

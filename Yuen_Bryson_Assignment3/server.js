@@ -12,6 +12,11 @@ var products_array = require('./product_data.json'); // Links products_data.json
 var qString;
 var user_data = './user_data.json'; // Gets data from user_data.json and sets it as var user_data
 
+// Setup cookies and sessions
+var cookieParser = require('cookie-parser'); // Require cookie-parser
+var session = require('express-session'); // Require express sessions
+const nodemailer = require("nodemailer"); // Require nodemailer module
+
 if (fs.existsSync(user_data)) {
     var file_stats = fs.statSync(user_data);
     data = fs.readFileSync(user_data, 'utf-8');

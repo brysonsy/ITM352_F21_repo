@@ -3,6 +3,7 @@
 
 <!-- Load product data -->
 <script src="./products_data.js" type="text/javascript"></script>
+<script src="./navigation.js" type="text/javascript"></script>
 <script>
     // Borrowed and modified from Lab 13
     // Checks if q is a non negative int
@@ -38,33 +39,53 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Poke Mart</title>
-    <!--  Load style file -->
+    <!-- Load style files -->
     <link rel="stylesheet" href="./products_style.css">
+    <link rel="stylesheet" href="./navigation.css">
+    <!-- Call navigation bar -->
+    <script type="text/javascript">navigationbar();</script>
 </head>
 <body>
-    <div id="banner"><h1>PokeBall Mart</h1></div>
+    <div id="banner"><h1>Poke Mart</h1></div>
+    <script>
+        if (getCookie('user_info') != false) {
+        var user_info = JSON.parse(getCookie('user_info'));
+        console.log(user_info);
+        document.write(`Welcome, ${user_info["name"]}`); // If the user has a cookie called "user_info", display their name with welcome
+      } else {
+        document.write(`User not logged in`); // If the user does not have a cookie called "user_info", display message saying not logged in
+      };
+    </script>
     <div>
     <main>
         <form name="product_form" action="./purchase" method="POST">
             <input class="button" type="submit" value="Confirm Purchase" name="purchase_submit">
             <script>
+            // Hidden input product_key so the server can get products_array quantity
+            document.write(`<input type="hidden" name="product_type" value="${product_type}">`);
+            
             // Write products on page, write until products are undefined
             // Setup form
-            for(i = 0; i < products.length; i++) {
+            for(i = 0; i < products_array[product_type].length; i++) {
                 document.write(`
-                    <section class="item_display"><br><img src="${products[i].image}" align="left"></br></section>
+                    <section class="item_display"><br><img src="${[product_type][i].image}" align="left"></br></section>
                     <section class="item_text">
                         <p>
-                            <br><h2>${products[i].name}</h2></br>
-                            <br>${products[i].desc}</br>
-                            <br><b>$${products[i].price}</b></br>
+                            <br><h2>${[product_type][i].name}</h2></br>
+                            <br>${[product_type][i].desc}</br>
+                            <br><b>$${[product_type][i].price}</b></br>
                             <br>
                                 <label id="quantity${i}_label">Please type quantity desired: </label>
-                                <input type="text" placeholder="Quantity Available: ${products[i].quantity_available}" name="quantity${i}" onkeyup="checkQuantityTextbox(this);">
+                                <input type="text" placeholder="Quantity Available: ${[product_type][i].quantity_available}" name="quantity${i}" onkeyup="checkQuantityTextbox(this);">
+                                <input class="button" type="button" value="Add to Cart" name="addProduct${i}" id="cart_button" onclick="saveProduct(${i});">
                             </br>
+                            
                         </p>
                     </section>
                 `)
+            }
+            if (typeof sessionStorage[`${product_type}${i}`] != 'undefined') {
+                product_form[`quantity${i}`].value = sessionStorage[`${product_type}${i}`];
             }
             </script>
         </form>

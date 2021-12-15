@@ -1,142 +1,126 @@
-<!-- Register page, modified and borrowed Lab 14 and template from ww3schools.com -->
+<!-- Register page, modified and borrowed Lab 14, Lab 15 and template from ww3schools.com -->
 <!-- Author: Sean Sumida & Bryson Yuen -->
 
+<!-- Loads navbar -->
+<script src="./navbar.js" type="text/javascript"></script>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
-    <style>
-        /* Register Page Background */
-        html { 
-                background-image: url(./images/background.jpg); 
-                background-repeat: no-repeat;
-                background-size: cover;
-                background-position: center;
-            }
-            .container{
-           text-align: center;
-            overflow: auto;
-            background-color: whitesmoke;
-            margin-left: 30%;
-            margin-right: 30%;
-            padding-bottom: 20px;
-            border-radius: 5px;
-        }
-        /* button and input field from w3 schools */
-       .btn{
-            background-color: #3edfdf;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            margin-left: 30%;
-            margin-right: 30%;
-            border: none;
-            cursor: pointer;
-            width: 40%;
-            border-radius: 5px;
-            margin-bottom: 20px;
-       }
-        .btn:hover {
-            opacity: 0.8;
-        }
-        .btn2{
-            background-color: #ff7477;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
-            cursor: pointer;
-            margin-left: 30%;
-            margin-right: 30%;
-            width: 40%;
-            border-radius: 5px;
 
-       }
-        .btn2:hover {
-            opacity: 0.8;
-        }
-        input[type=text] {
-            width: 90%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            background-color: whitesmoke;
-            border: none;
-            border-bottom: 2px solid black;
-        }
-        input[type=password] {
-            width: 90%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            background-color: whitesmoke;
-            border: none;
-            border-bottom: 2px solid black;
-        }
-        </style>
-</head>
-<body>
-    
-<!-- Creates form for new users to make an account--> 
-<!-- Borrowed and modified code from Lab 14-->
-    <form id="register_form" name="register_form" action="process_register" method="POST">
-        <div class="container">
-            <h1>Register a Poke Mart Account</h1>
-    <p>To shop and purchase products please register to become a member!</p>
-            <div id="formBoxes">
-                <!-- New user registration page -->
-                <input type="text" name="name" id="name" placeholder="Enter Name" style="padding:8px">
-                <br>
-                <span id="name_errors"></span>
-                <br>
-                <input type="text" name="username" id="username" placeholder="Enter Username" style="padding:8px">
-                <br>
-                <span id="username_errors"></span>
-                <br>
-                <input type="text" name="email" id="email" placeholder="Enter Email (ex. kazman@hawaii.edu)" style="padding:8px">
-                <br>
-                <span id="email_errors"></span>
-                <br>
-                <input type="password" name="password" id="password" placeholder="Enter Password" style="padding:8px">
-                <br>
-                <span id="password_errors"></span>
-                <br>
-                <input type="password" name="repeat_password" id="repeat_password" placeholder="Re-enter Password" style="padding:8px">
-                <br>
-                <span id="repeat_password_errors"></span>
-                <br>
-            </div>
-            <!-- Submit button -->
-            <input type="submit" class="btn" name="register_button" id="register_button" value=Register></input>
-            <p style="font-weight: bold;">Already have an account?</p>
-       </div>
-       <!-- Login button -->
-       <input type="button" class="btn2" id="loginhere_button" value="Login here" onclick="window.location.href = './login.html' + document.location.search;"></br></p>
-    </hr>
-    </form>
-    <script>
-        // Displays an alert 
-      window.onload = function () {
-            let params = (new URL(document.location)).searchParams;
-            // Makes an alert with error message
-            if (params.has("errorMessage")) {
-                alert(params.get("errorMessage"));
-            }
-        }
+<head>
+    <!-- Loads the multiple style sheets -->
+    <link rel="stylesheet" href="stylesheets/register.css">
+    <link rel="stylesheet" href="stylesheets/navbar.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <script type="text/javascript">
+        navbar(); // Calls the navbar function
     </script>
+    <hr class="w3-border-grey" style="margin:auto;width:40%">
+</head>
+
+<body>
+    <script>
+        // Creates a form for the user to register with, requires name, username, email, and password
+        document.write(`
+        <form action="process_register${location.search}" method="post">`);
+    </script>
+    <h1 style="text-align: center;">Register</h1>
+    <!-- Registration page -->
+    <div class="container">
+        <p style="text-align: center;">Please enter the information below to create an account.</p><br>
+        <!-- Full name input field -->
+        <label for="fullname"><b>Enter First and Last Name</b></label>
+        <span id="name_msg" style="color: red;"></span>
+        <input type="text" placeholder="Enter Full Name (Ex. Rick Kazman)" name="fullname" id="fullname" required>
+
+        <!-- Username input field -->
+        <label for="username"><b>Username</b></label>
+        <span id="username_msg" style="color: red;"></span>
+        <input type="text" placeholder="Enter Username" name="username" id="username" required><br>
+
+        <!-- Email input field -->
+        <label for="email"><b>Email</b></label><br>
+        <span id="email_msg" style="color: red;"></span>
+        <input type="text" placeholder="Enter Email (ex. kazman@hawaii.edu)" name="email" id="email" required>
+
+        <!-- Password input field -->
+        <label for="password"><b>Password</b></label>
+        <span id="password_msg" style="color: red;"></span>
+        <input type="password" placeholder="Enter Password" name="password" id="password" required>
+
+        <!-- Repeat password input field -->
+        <label for="repeat_password"><b>Confirm Password</b></label>
+        <span id="repeat_password_msg" style="color: red;"></span>
+        <input type="password" placeholder="Repeat Password" name="repeat_password" id="repeat_password" required>
+        <hr>
+
+        <!-- Button that submits register form -->
+        <p style="text-align: center;">Register now!</p>
+        <button type="submit" class="btn">Register</button>
+    </div>
+
+    <div class="container signin">
+        <script>
+            // If user already has an account, allows them to go to login page
+            document.write(`<p>Already have an account? <a href="./login.html${location.search}">Login here</a>.</p>`);
+        </script>
+    </div>
+    </form>
 </body>
+
 </html>
 <script>
+    // Validation for new user registration
     let params = (new URL(document.location)).searchParams;
-    if (params.has('errors_obj')) {
-        // Converts string to json then object
-        var errors = JSON.parse(params.get('errors_obj'));
-        for(err in errors) { 
-            // Puts error messages in span where error occured
-            document.getElementById(`${err}_errors`).innerHTML = errors[err].join('<br>');
-            // Makes textboxes sticky
-            document.getElementById(err).value = params.get(err);
-        }       
+    // If there are errors in the registration form, stickies full name, username, and email so the user does not have to retype them
+    if (params.has('errors')) {
+        fullname.value = params.get('fullname'); // Full name sticky
+        username.value = params.get('username'); // User name sticky
+        email.value = params.get('email'); // Email sticky
+        var errors = params.get('errors').split(';');
+        for (error_msg of errors) {
+            // Each username needs to be unique
+            if (error_msg == 'Username taken') {
+                username_msg.innerHTML = error_msg;
+            }
+
+            // Full names can only contain letters
+            if (error_msg == 'Only letters are allowed for full names.') {
+                name_msg.innerHTML = error_msg;
+            }
+
+            // Full names can't be longer than a maximum of 30 characters
+            if (error_msg == 'Full name can only contain 30 characters maximum.') {
+                name_msg.innerHTML = error_msg;
+            }
+            
+            // Usernames need to be between 4 and 10 characters
+            if (error_msg == 'Username must contain at minimum 4 characters and a maximum of 10 characters.') {
+                username_msg.innerHTML = error_msg;
+            }
+
+            // Usernames can only contain numbers and letters
+            if (error_msg == 'Username can only have letters and numbers.') {
+                username_msg.innerHTML = error_msg;
+            }
+
+            // Email needs to be in xxx@xxx.xxx format
+            if (error_msg == 'Must enter a valid email (ex. kazman@hawaii.edu).') {
+                email_msg.innerHTML = error_msg;
+            }
+
+            // Passwords must be at minimum 6 characters
+            if (error_msg == 'Password must be a minimum of 6 characters.') {
+                password_msg.innerHTML = error_msg;
+            }
+
+            // Password and password confirmation need to match
+            if (error_msg == 'Passwords do not match.') {
+                repeat_password_msg.innerHTML = error_msg;
+            }
+        };
+        // If there are errors, informs the user where the errors happened
+        alert('Problem(s) found:\n' + errors.join('\n')); 
     }
 </script>

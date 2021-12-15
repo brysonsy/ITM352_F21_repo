@@ -1,119 +1,78 @@
 <!-- Login page, modified and borrowed Lab 14 and template from ww3schools.com -->
 <!-- Author: Sean Sumida & Bryson Yuen -->
 
-<!-- Loads user data -->
-<script src="./user_data.json" type="json"></script> 
+<!-- Loads navbar -->
+<script src="./navbar.js" type="text/javascript"></script>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <!-- Loads the multiple style sheets -->
+    <link rel="stylesheet" href="stylesheets/login.css">
+    <link rel="stylesheet" href="stylesheets/navbar.css">
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <style>
-    /* Login Page Background */
-        html { 
-            background-image: url(./images/background.jpg); 
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            text-align: center;
-        }
-        .container{
-           text-align: center;
-            overflow: auto;
-            background-color: whitesmoke;
-            margin-left: 30%;
-            margin-right: 30%;
-            padding-bottom: 20px;
-            border-radius: 5px;
-        }
-        /* button and input field from w3 schools */
-       .btn{
-            background-color: #3edfdf;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            margin-left: 30%;
-            margin-right: 30%;
-            border: none;
-            cursor: pointer;
-            width: 40%;
-            border-radius: 5px;
-       }
-        .btn:hover {
-            opacity: 0.8;
-        }
-        .btn2{
-            background-color: #ff7477;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
-            cursor: pointer;
-            margin-left: 30%;
-            margin-right: 30%;
-            width: 40%;
-            border-radius: 5px;
-
-       }
-        .btn2:hover {
-            opacity: 0.8;
-        }
-        input[type=text] {
-            width: 90%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            background-color: whitesmoke;
-            border: none;
-            border-bottom: 2px solid black;
-        }
-        input[type=password] {
-            width: 90%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            background-color: whitesmoke;
-            border: none;
-            border-bottom: 2px solid black;
-        }
-    </style>
-    <script>
-        // Displays an alert
-        window.onload = function () {
-            let params = (new URL(document.location)).searchParams;
-            // If there is an error put up an alert
-            if (params.has("loginMessage")) {
-                alert(params.get("loginMessage"));
-            }
-            // Username stays if password is input wrong
-            if (params.has('wrong_pass')) {
-                username.value = params.get('wrong_pass')
-            }
-        }
+    <script type="text/javascript">
+        navbar(); // Loads the navbar
     </script>
 </head>
-<body> 
-        <!--Makes form to login user-->
-        <form name="login" action="process_login" method="POST">
-            <div class="container"><br>
-                <h1>Poke Mart Login Page</h1>
-        <p>To shop and purchase products please login or register to become a member!</p>
-                <!--Creates a textbox to enter username-->
-                <input type="text" name="username" id="username" size="40" placeholder="Enter Username" required><br>
 
-                <!--Creates a textbox to enter password-->
-                <input type="password" name="password" size="40" placeholder="Enter Password" onkeyup="" required><br>
-                <!--Creates a button to login-->
-                <br><input type="submit" value="Login" name="login" class='btn'>
-                </div>
-                
-                 <!--Button for Users who need to create an account-->
-    <input type="button" name="newuser" value="New Users Register Here" class="btn2"
-    onclick="window.location='./register.html' + document.location.search;">
-            </form>
-        <script> 
-            // Saves query string from products page for the invoice
-            login.action += document.location.search; 
-         </script>
+<body>
+    <header>
+        <br>
+    </header>
+    
+    <script>
+        // Creates a form for the user to log in with
+        document.write(`
+        <form action="process_login${location.search}" method="post">`);
+    </script>
+    <h1 style="text-align: center;">Login</h1>
+    <div class="container">
+            <p style="text-align: center;">Please enter your username and password.</p>
+
+        <!-- Username input box -->
+        <label for="uname"><b>Username</b></label>
+        <br>
+        <span id="username_msg" style="color: red;"></span>
+        <input type="text" placeholder="Enter Username" name="username" id="username" required>
+
+        <!-- Password input box -->
+        <label for="psw"><b>Password</b></label>
+        <br>
+        <span id="psw_msg" style="color: red;"></span>
+        <input type="password" placeholder="Enter Password" name="password" required>
+        <br>
+        <!-- Button that submits login form -->
+        <button class="btn" type="submit">Login</button>
+    </div>
+
+    <div class="container register">
+        <script>
+            // Allows user to go to register page if they need to make an account
+            document.write(` <p>Need an account? <a href="./register.html${location.search}">Register here.</a></p>`);
+        </script>
+    </div>
+
+    </form>
 </body>
+
 </html>
+
+<!-- Errors for login -->
+<script>
+    let params = (new URL(document.location)).searchParams;
+    // If username has an error, alerts user
+    if (params.has('username_error')) {
+        username_msg.innerHTML = params.get('username_error');
+        username.value = params.get('username'); // If password is incorrect, username becomes sticky
+        alert(params.get('username_error')); // If username is invalid, alert user
+    }
+    // If password has an error, alerts user
+    if (params.has('password_error')) {
+        psw_msg.innerHTML = params.get('password_error');
+        username.value = params.get('username'); // Sticky username if there is an error
+        alert(params.get('password_error')); // If password is invalid, alert user
+    }
+</script>

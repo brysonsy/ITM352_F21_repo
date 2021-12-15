@@ -7,7 +7,7 @@ Program based off of Assignment2, Lab 13, Lab 14, Lab 15, Noah Kim Assignment 3,
 var express = require('express'); // Loads express module
 var app = express(); // Places express module in variable app
 var myParser = require("body-parser"); // Gets access to POST and GET data
-var products = require('./products.json'); // Links products.json and sets it as var products
+var products = require('./products_data.json'); // Links products_data.json and sets it as var products
 app.use(myParser.urlencoded({ extended: true }));
 app.use(myParser.json());
 var fs = require('fs'); // Starts and loads fs systems
@@ -34,10 +34,10 @@ const shift = 4;
 var user_data_file = './user_data.json';
 
 // Checks to see if the file exists
-if (fs.existsSync(user_data_file)) { 
+if (fs.existsSync(user_data_file)) {
     var file_stats = fs.statSync(user_data_file);
     // Returns string and parses into object, then sets object value to user_data
-    var user_data = JSON.parse(fs.readFileSync(user_data_file, 'utf-8')); 
+    var user_data = JSON.parse(fs.readFileSync(user_data_file, 'utf-8'));
 }
 else {
     console.log(`${user_data_file} does not exist!`);
@@ -47,7 +47,7 @@ else {
 app.all('*', function (request, response, next) {
     if (typeof request.session.cart == "undefined") {
         // Creates sessions for the shopping cart
-        request.session.cart = {}; 
+        request.session.cart = {};
     }
     next();
 });
@@ -69,43 +69,6 @@ function encrypt(password) {
     }
     return encrypted_result;
 }
-
-// Process Login
-// Borrowed and modified code from Assignment 2, Noah Kim Assignment 3, and Jacob Graham Assignment 3
-app.post('/process_login', function (request, response, next) {
-    // For username and password errors deletes them from the query after they are fixed
-    delete request.query.username_error;
-    delete request.query.password_error;
-    username = request.body.username.toLowerCase(); // Makes sure that the username is lowercase
-    the_password = request.body.password;
-    let encrypted_password_input = encrypt(the_password);
-    // Check if username is registered in userdata
-    if (typeof user_data[username] != 'undefined') { 
-        // Check if password is registered in userdata and if it is correct
-        if (user_data[username].password == encrypted_password_input) { 
-            request.query.name = user_data[username].name; // Retrieves the name of the user
-            request.query.email = user_data[username].email; // Retreives the email of the user
-            response_string =
-                `<script> 
-            alert('Login for ${user_data[username].name} Login Successful.'); 
-            location.href = "${'./invoice.html?' + qs.stringify(request.query)}"; 
-            </script>`;
-            var user_info = { "username": username, "name": user_data[username].name, "email": user_data[username].email };
-            response.cookie('user_info', JSON.stringify(user_info), { maxAge: 30 * 60 * 1000 }); // Makes the session expire after 30 minutes
-            response.send(response_string); // Redirects to invoice.html with username info and products if there are no errors
-            return;
-            // If password is invalid, sends error alert
-        } else { 
-            request.query.username = username;
-            request.query.name = user_data[username].name;
-            request.query.password_error = 'Thats Not a Correct Password! :( ';
-        }
-    } else { //Send error alert if username is invalid
-        request.query.username = username;
-        request.query.username_error = 'Thats Not a Correct Username! :(';
-    }
-    response.redirect('./login.html?' + qs.stringify(request.query)); // Forces user to login again if there are errors
-});
 
 // Process Registration
 // Borrowed and modified code from Assignment 2, Noah Kim Assignment 3, and Jacob Graham Assignment 3
@@ -161,7 +124,7 @@ app.post('/process_register', function (request, response, next) {
         POST = request.body
         var username = POST['username']
         let encrypted_pass = encrypt(request.body.password); // Makes the new password registered the encrypted password
-        user_data[username] = {}; 
+        user_data[username] = {};
         user_data[username].name = request.body.fullname; // Saves user's name
         user_data[username].password = encrypted_pass; // Saves encrypted password
         user_data[username].email = request.body.email; // Saves user's email
@@ -200,10 +163,65 @@ app.post('/cart_qty', function (request, response) {
     response.json({ qty: total });
 });
 
-// Makes products.json into a JavaScript file
+// Process Login
+// Borrowed and modified code from Assignment 2, Noah Kim Assignment 3, and Jacob Graham Assignment 3
+app.post('/process_login', function (request, response, next) {
+    // For username and password errors deletes them from the query after they are fixed
+    delete request.query.username_error;
+    delete request.query.password_error;
+    username = request.body.username.toLowerCase(); // Makes sure that the username is lowercase
+    the_password = request.body.password;
+    let encrypted_password_input = encrypt(the_password);
+    // Check if username is registered in userdata
+    if (typeof user_data[username] != 'undefined') {
+        // Check if password is registered in userdata and if it is correct
+        if (user_data[username].password == encrypted_password_input) {
+            request.query.name = user_data[username].name; // Retrieves the name of the user
+            request.query.email = user_data[username].email; // Retreives the email of the user
+            response_string =
+                `<script> 
+            alert('Login for ${user_data[username].name} Login Successful.'); 
+            location.href = "${'./invoice.html?' + qs.stringify(request.query)}"; 
+            </script>`;
+            var user_info = { "username": username, "name": user_data[username].name, "email": user_data[username].email };
+            response.cookie('user_info', JSON.stringify(user_info), { maxAge: 30 * 60 * 1000 }); // Makes the session expire after 30 minutes
+            response.send(response_string); // Redirects to invoice.html with username info and products if there are no errors
+            return;
+            // If password is invalid, sends error alert
+        } else {
+            request.query.username = username;
+            request.query.name = user_data[username].name;
+            request.query.password_error = 'Thats Not a Correct Password! :( ';
+        }
+    } else { //Send error alert if username is invalid
+        request.query.username = username;
+        request.query.username_error = 'Thats Not a Correct Username! :(';
+    }
+    response.redirect('./login.html?' + qs.stringify(request.query)); // Forces user to login again if there are errors
+});
+
+// Process logout request
+// Borrowed and modified code from Noah Kim Assignment 3
+app.get("/logout", function (request, response) {
+    var user_info = request.cookies["user_info"]; // Sets user information as JavaScript
+    console.log(JSON.stringify(user_info));
+    // Sends message if user successfully logs out
+    if (user_info != undefined) {
+        var username = user_info["username"]; // Checks which user is logged in
+        logout_msg = `<script>alert('You have logged out.'); location.href="./index.html";</script>`;
+        response.clearCookie('user_info'); // Destroys cookie
+        response.send(logout_msg); // Send message if logged out 
+        // If there is no user_info, then displays error message and redirects user to index page
+    } else {
+        logouterror_msg = `<script>alert("Unable to logout if you are not currently logged in."); location.href="./index.html";</script>`;
+        response.send(logouterror_msg);
+    }
+});
+
+// Makes products_data.json into a JavaScript file
 // Create an empty variable then reads the data in the json file and saves it as javascript 
 var products_data;
-var products_data_file = './products.json';
+var products_data_file = './products_data.json';
 if (fs.existsSync(products_data_file)) {
     console.log("reading the file");
     var products_data = JSON.parse(fs.readFileSync(products_data_file, 'utf-8'));
@@ -228,7 +246,7 @@ app.post('/add_to_cart', function (request, response) {
         request.session.cart[ptype][pindex] = parseInt(qty);
         response.json({ "status": "Successfully added to cart, please refresh browser to display number of items in cart." });
         // Tests if items are out of stock
-    } else if (qty > products_data[ptype][pindex].quantity_available) { 
+    } else if (qty > products_data[ptype][pindex].quantity_available) {
         console.log("products data ptype =" + products_data[ptype]);
         response.json({ "status": "Not enough in stock, not added to cart" });
         // Tests if there are no quantities ordered
@@ -260,42 +278,23 @@ app.post("/update_cart", function (request, response) {
         };
     };
     // Send alert if there are errors
-    if (haserrors == true) { 
+    if (haserrors == true) {
         msg = "Invalid quantities, cart has not updated.";
-    // Update cart if there are no errors
-    } else { 
+        // Update cart if there are no errors
+    } else {
         msg = "Cart updated successfully. ";
         request.session.cart = request.body.quantities;
     }
     // If items failed to add to the cart, finds the page the user came from
-    const ref_URL = new URL(request.get('Referrer')); 
+    const ref_URL = new URL(request.get('Referrer'));
     ref_URL.searchParams.set("msg", msg); // Gets new querystring and adds to querystring
     response.redirect(ref_URL.toString()); // Redirect user back to page they were on
     console.log(qty);
 });
 
-
-// Process logout request
-// Borrowed and modified code from Noah Kim Assignment 3
-app.get("/logout", function (request, response) {
-    var user_info = request.cookies["user_info"]; // Sets user information as JavaScript
-    console.log(JSON.stringify(user_info));
-    // Sends message if user successfully logs out
-    if (user_info != undefined) {
-        var username = user_info["username"]; // Checks which user is logged in
-        logout_msg = `<script>alert('You have logged out.'); location.href="./index.html";</script>`;
-        response.clearCookie('user_info'); // Destroys cookie
-        response.send(logout_msg); // Send message if logged out 
-    // If there is no user_info, then displays error message and redirects user to index page
-    } else { 
-        logouterror_msg = `<script>alert("Unable to logout if you are not currently logged in."); location.href="./index.html";</script>`;
-        response.send(logouterror_msg);
-    }
-});
-
 // Process purchase request and emails the invoice
 // Borrowed and modified code from Assignment 3 example code and Noah Kim Assignment 3
-app.post('/completePurchase', function (request, response) {
+app.post('/complete_purchase', function (request, response) {
     var invoice = request.body; // Saves the invoice data to a variable
     var user_info = JSON.parse(request.cookies["user_info"]); // Sets user info to javascript
     var the_email = user_info["email"]; // Saves the users email as a variable
@@ -310,7 +309,6 @@ app.post('/completePurchase', function (request, response) {
             rejectUnauthorized: false
         }
     });
-
     var mailOptions = {
         from: 'sumidase@hawaii.edu',
         to: the_email,

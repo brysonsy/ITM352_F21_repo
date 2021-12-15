@@ -6,9 +6,16 @@
   // Gets data from the form to create an invoice
   let params = (new URL(document.location)).searchParams;
 
+  // Loads product data
+  var products_data;
+  loadJSON('get_products_data', function (response) {
+    // Parses JSON string into object
+    allproducts = JSON.parse(response);
+  });
+
   // Function to complete purchase from shopping cart page
-  function completePurchase() {
-    completePurchasediv.innerHTML = `Thank you for ${user_info["name"]} your purchase`;
+  function complete_purchase() {
+    complete_purchase_div.innerHTML = `Thank you for ${user_info["name"]} your purchase`;
     div = invoiceTableDiv;
     var scripts = div.getElementsByTagName('script');
     var i = scripts.length;
@@ -17,7 +24,7 @@
     }
     // Borrowed and modified code from https://stackoverflow.com/questions/29775797/fetch-post-json-data
     (async () => {
-      const rawResponse = await fetch('./completePurchase', {
+      const rawResponse = await fetch('./complete_purchase', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -64,12 +71,6 @@
     xobj.send(null);
   }
 
-  // Loads product data
-  var products_data;
-  loadJSON('get_products_data', function (response) {
-    // Parses JSON string into object
-    allproducts = JSON.parse(response);
-  });
 </script>
 <!-- Loads navbar -->
 <script src="./navbar.js" type="text/javascript"></script>
@@ -92,17 +93,17 @@
 <body>
   <!-- Borrowed and modified from Lab 15 and Invoice 3 -->
   <header>
-      <script>
-        // User personalization
-        if (getCookie('user_info') != false) {
-          var user_info = JSON.parse(getCookie('user_info'));
-          console.log(user_info);
-          document.write(`<h2>Welcome, ${user_info["name"]}<h2>`); // If the user has a cookie called "user_info", welcomes them by name
-        } else {
-          document.write(`<h2>User not logged in</h2>`); // If the user does not have a cookie called "user_info", not logged in message is displayed
-        };
-      </script>
-      <h1>Shopping Cart</h1>
+    <script>
+      // User personalization
+      if (getCookie('user_info') != false) {
+        var user_info = JSON.parse(getCookie('user_info'));
+        console.log(user_info);
+        document.write(`<h2>Welcome, ${user_info["name"]}<h2>`); // If the user has a cookie called "user_info", welcomes them by name
+      } else {
+        document.write(`<h2>User not logged in</h2>`); // If the user does not have a cookie called "user_info", not logged in message is displayed
+      };
+    </script>
+    <h1>Shopping Cart</h1>
     </p>
   </header>
   <div id="invoiceTableDiv">
@@ -129,7 +130,7 @@
             for (prod_key in cart_data) {
               products = allproducts[prod_key];
               for (i in cart_data[prod_key]) {
-                // If quantities > 0, calculate the exteneded price and subtotal for the invoice
+                // If quantities > 0, calculate the extended price and subtotal for the invoice
                 if (cart_data[prod_key][i] > 0) {
                   extended_price = cart_data[prod_key][i] * products[i].price;
                   subtotal += extended_price;
@@ -185,12 +186,12 @@
             <td style="text-align: center;" colspan="3" width="67%">Sub-total</td>
             <td colspan="2">$
               <!-- Displays calculated subtotal -->
-              <script>document.write(subtotal.toFixed(2));</script> 
+              <script>document.write(subtotal.toFixed(2));</script>
             </td>
           </tr>
           <tr>
             <td style="text-align: center;" colspan="3" width="67%"><span>Tax @
-               <!-- Displays tax rate at Hawaii Rates -->
+                <!-- Displays tax rate at Hawaii Rates -->
                 <script>document.write(100 * tax_rate.toFixed(4));</script>%
               </span></td>
             <td colspan="2">$
@@ -206,8 +207,8 @@
           <tr>
             <td style="text-align: center;" colspan="3" width="67%"><strong>Total</strong></td>
             <td colspan="2"><strong>$
-              <!-- Grand total-->
-                <script>document.write(total.toFixed(2));</script> 
+                <!-- Grand total-->
+                <script>document.write(total.toFixed(2));</script>
               </strong></td>
           </tr>
         </tbody>
@@ -223,25 +224,24 @@
     // If user is logged in, continue and send email confirmation
     if (getCookie("user_info") != false) {
       document.write(`
-        <div id="completePurchasediv" class="completePurchasediv">
-        <input type="button" class="btn" onclick="completePurchase();" value="Complete Purchase" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;, text-align: center;" >
+        <div id="complete_purchase_div" class="complete_purchase_div">
+        <input type="button" class="btn" onclick="complete_purchase();" value="Complete Purchase" style="text-align: center;" >
         </div>`);
       // If user is not logged in, make them login
     } else {
       document.write(`
         <div>
-        <input type="button" class="btn" onclick="location.href='./login.html';" value="Login to Complete Purchase" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;, text-align: center;" >
+        <input type="button" class="btn" onclick="location.href='./login.html';" value="Login to Complete Purchase" style="text-align: center;" >
         </div>`);
     }
   </script>
   <div class="policy"><br><b>
-      <br> 
-      <!-- Shows shipping information on page for user -->
+      <br>
       <strong>SHIPPING POLICY:</strong>
       <br>$2 shipping for up to 19.99
       <br>$5 shipping up to 49.99
-      <br> Free shipping $50+
-      <br>no refunds!
+      <br>Free shipping $50+
+      <br>No refunds!
   </div>
   <br>
 </footer>

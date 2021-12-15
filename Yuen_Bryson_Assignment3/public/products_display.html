@@ -11,12 +11,12 @@
     });
 
   // Gets data from the form to create the invoice
-  let params = (new URL(document.location)).searchParams; 
+  let params = (new URL(document.location)).searchParams;
   var this_product_key = params.get("product_key");
   var products = allproducts[this_product_key];
   window.onload = function () {
     // Checks if there is quantity data that needs to be checked
-    if (params.has('submitPurchase')) { 
+    if (params.has('submitPurchase')) {
       // Checks to see if all quantities pass the tests
       var haserrors = false; // Assumes there are no errors in the beginning 
       var hasquantities = false; // Assumes no quantities are entered yet
@@ -31,7 +31,7 @@
           }
           // If the quantity entered is a positive number, sets hasquantities variable to true
           if (a_qty > 0) {
-            hasquantities = true; 
+            hasquantities = true;
           }
         }
       }
@@ -50,7 +50,7 @@
     }
   };
 
-  // isNonNegInt and checkQuantityTextbox functions adapted from Lab 11 & 12
+  // Borrowed and modified from Assignment 2 and Lab 14
   function isNonNegInt(q, return_errors = false) {
     errors = []; // Initially assumes there are no errors
     if (q == ''); // If nothing is imputed, default value of 0 
@@ -60,28 +60,10 @@
     return return_errors ? errors : (errors.length == 0);
   }
 
-  function checkQuantityTextbox(theTextbox) { //Check if quantity entered passes the is non neg integer test
-    errs = isNonNegInt(theTextbox.value, true); // Calls is Non Neg Integer function
+  // Borrowed and Modified from Lab 13
+  function checkQuantityTextbox(theTextbox) { // Checks if quantity entered passes the isNonNegInt test
+    errs = isNonNegInt(theTextbox.value, true); // Calls the isNonNegInt function
     document.getElementById(theTextbox.name + '_label').innerHTML = errs.join(", ");
-  }
-
-  // Function to add items to shopping cart, used in server
-  function addtocart(prod_index) {
-    // Gets value from textbox
-    console.log({ "prod_type": this_product_key, "prod_index": prod_index, "prod_qty": product_form[`quantity${prod_index}`].value }); 
-    // Borrowed from https://stackoverflow.com/questions/29775797/fetch-post-json-data
-    (async () => { 
-      const rawResponse = await fetch('./add_to_cart', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ "prod_type": this_product_key, "prod_index": prod_index, "prod_qty": product_form[`quantity${prod_index}`].value })
-      });
-      const content = await rawResponse.json();
-      alert(content["status"]);
-    })();
   }
 
   // Function to get cookies
@@ -101,9 +83,30 @@
     }
     return false;
   }
+
+  // Function to add items to shopping cart, used in server
+  // Borrowed and modified code from https://stackoverflow.com/questions/29775797/fetch-post-json-data
+  function addToCart(prod_index) {
+    // Gets value from textbox
+    console.log({ "prod_type": this_product_key, "prod_index": prod_index, "prod_qty": product_form[`quantity${prod_index}`].value });
+    (async () => {
+      const rawResponse = await fetch('./add_to_cart', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ "prod_type": this_product_key, "prod_index": prod_index, "prod_qty": product_form[`quantity${prod_index}`].value })
+      });
+      const content = await rawResponse.json();
+      alert(content["status"]);
+    })();
+  }
+
 </script>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta brand="viewport" content="width=device-width, initial-scale=1.0">
@@ -115,6 +118,7 @@
     navbar(); // Calls the navbar function
   </script>
 </head>
+
 <body>
   <!-- Borrowed and modified code from Noah Kim Assignment 3, Jacob Graham Assignment 3, our Assignment 2, and w3schools -->
   <header>
@@ -123,15 +127,15 @@
       if (getCookie('user_info') != false) {
         var user_info = JSON.parse(getCookie('user_info'));
         console.log(user_info);
-        document.write(`<h2>Welcome, ${user_info["name"]}<h2>`); 
-      // If the user does not have a cookie called "user_info", not logged in message is displayed
+        document.write(`<h2>Welcome, ${user_info["name"]}<h2>`);
+        // If the user does not have a cookie called "user_info", not logged in message is displayed
       } else {
-        document.write(`<h2>User not logged in</h2>`); 
+        document.write(`<h2>User not logged in</h2>`);
       };
     </script>
   </header>
   </div>
-<h1>Welcome to the PokeMart</h1>
+  <h1>Welcome to the PokeMart</h1>
   <!-- Calls the add to cart function -->
   <form action="/add_to_cart" name="product_form" method="POST">
     <div>
@@ -150,7 +154,7 @@
                             <br>
                                 <label id="quantity${i}_label">Please type quantity desired: </label>
                                 <input type="text" placeholder="Quantity Available: ${products[i].quantity_available}" name="quantity${i}" onkeyup="checkQuantityTextbox(this);">
-                                <input type="button" class="button" onclick="addtocart(${i});" value="Add to cart" name="submitPurchase" class="add_cart">
+                                <input type="button" class="button" onclick="addToCart(${i});" value="Add to cart" name="submitPurchase" class="add_cart">
                             </br>
                             
                         </p>
@@ -163,4 +167,5 @@
     </div>
   </form>
 </body>
+
 </html>

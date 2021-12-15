@@ -1,21 +1,11 @@
 /* Author: Sean Sumida & Bryson Yuen
   CSS for nav bar */
 
-/* makes navbar stay in place when scrolling */
-ul {
-    list-style-type: none;
-    margin: -10;
-    padding: 0;
-    overflow: hidden;
-    background-color: #78a2cc;
-    position: sticky; 
-    top: 0;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    z-index: 2;
-}
+/* Makes navbar stay in place when scrolling */
 li {
     display: inline-block;
 }
+
 li a {
     display: block;
     color: white;
@@ -27,6 +17,18 @@ li a {
 
 li a:hover {
     background-color: pink;
+}
+
+ul {
+    list-style-type: none;
+    margin: -10;
+    padding: 0;
+    overflow: hidden;
+    background-color: #78a2cc;
+    position: sticky; 
+    top: 0;
+    font-family:"Times New Roman", Times, serif;
+    z-index: 2;
 }
 
 /* Styling the products in the sub nav bar */
@@ -41,14 +43,16 @@ li a:hover {
     position: relative; 
     background-color: #78a2cc;
     list-style-type: none;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family:"Times New Roman", Times, serif;
     margin: auto;
     z-index: 1;
 }
+
 .nav_items a:link{
     color:#272D2D;
     text-decoration: none;
 }
+
 a:hover{
     background-color: pink;
 }

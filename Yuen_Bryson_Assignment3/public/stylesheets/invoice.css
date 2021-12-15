@@ -1,6 +1,20 @@
 /* Author: Sean Sumida & Bryson Yuen
   CSS for invoice */
 
+body {
+  /* Background */
+  background: url("../images/background.jpg") ivory;
+  font-family:"Times New Roman", Times, serif;
+}
+
+h1{
+  text-align: center;
+}
+
+h2{
+  text-align: center;
+}
+
 /* Button Styling */
 .button {
   background-color: #6c706c;
@@ -12,25 +26,6 @@
   font-size: 16px;
 }
 
-body {
-  /* Background */
-  background: url("../images/background.jpg") ivory;
-  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-}
-
-h1{
-text-align: center;
-}
-td{
-  text-align: center;
-}
-/* Border for table*/
-#invoiceTable, th, td{
-  margin-left: auto;
-  margin-right: auto;
-  border: 1px solid black;
-  border-collapse: collapse;
-}
 /* Button styling */
 .btn{
   background-color: #3edfdf;
@@ -44,12 +39,24 @@ td{
   width: 40%;
   border-radius: 5px;
 }
+
 .btn:hover {
   opacity: 0.8;
 }
-.policy{
+
+td{
   text-align: center;
 }
-h2{
+
+/* Border for table*/
+#invoiceTable, th, td{
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.shippingInfo{
   text-align: center;
 }
+

@@ -7,7 +7,7 @@ html {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family:"Times New Roman", Times, serif;
 }
 
 /* Styling for register area */
@@ -20,6 +20,7 @@ margin-right: 30%;
 padding-bottom: 20px;
 border-radius: 5px;
 }
+
 /* Button and input field from w3 schools */
 .btn{
 background-color: #3edfdf;
@@ -34,25 +35,11 @@ width: 40%;
 border-radius: 5px;
 margin-bottom: 20px;
 }
+
 .btn:hover {
 opacity: 0.8;
 }
-.btn2{
-background-color: #ff7477;
-color: white;
-padding: 14px 20px;
-margin: 8px 0;
-border: none;
-cursor: pointer;
-margin-left: 30%;
-margin-right: 30%;
-width: 40%;
-border-radius: 5px;
 
-}
-.btn2:hover {
-opacity: 0.8;
-}
 input[type=text] {
 width: 90%;
 padding: 12px 20px;
@@ -61,6 +48,7 @@ background-color: whitesmoke;
 border: none;
 border-bottom: 2px solid black;
 }
+
 input[type=password] {
 width: 90%;
 padding: 12px 20px;

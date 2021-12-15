@@ -227,7 +227,6 @@ app.post('/add_to_cart', function (request, response) {
         }
         request.session.cart[ptype][pindex] = parseInt(qty);
         response.json({ "status": "Successfully added to cart, please refresh browser to display number of items in cart." });
-  
         // Tests if items are out of stock
     } else if (qty > products_data[ptype][pindex].quantity_available) { 
         console.log("products data ptype =" + products_data[ptype]);
@@ -242,19 +241,22 @@ app.post('/add_to_cart', function (request, response) {
 });
 
 // Gets shopping cart data info
-app.post('/get_cart', function (request, response, next) {
+app.post('/get_cart', function (request, response) {
     response.json(request.session.cart);
 });
 
 // Updates shopping cart session with new quantity info
 // Borrowed and modified code from Noah Kim Assignment 3 and Jacob Graham Assignment 3
-app.post("/update_cart", function (request, response, next) {
+app.post("/update_cart", function (request, response) {
     // Replaces cart in session with post and checks if updated quantities are valid
     let haserrors = false;
     for (let ptype in request.body.quantities) {
         for (let i in request.body.quantities[ptype]) {
             qty = Number(request.body.quantities[ptype][i]);
+            console.log(qty);
+            qty = parseInt(Number(qty));
             haserrors = !isNonNegInteger(Number(qty)) || haserrors;
+            console.log(qty);
         };
     };
     // Send alert if there are errors
@@ -269,6 +271,7 @@ app.post("/update_cart", function (request, response, next) {
     const ref_URL = new URL(request.get('Referrer')); 
     ref_URL.searchParams.set("msg", msg); // Gets new querystring and adds to querystring
     response.redirect(ref_URL.toString()); // Redirect user back to page they were on
+    console.log(qty);
 });
 
 

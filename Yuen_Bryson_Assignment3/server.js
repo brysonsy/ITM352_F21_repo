@@ -153,16 +153,6 @@ app.post('/process_register', function (request, response, next) {
     }
 });
 
-// Cart quantity, adds cart quantities to navbar
-// Borrowed and modified code from Noah Kim Assignment 3
-app.post('/cart_qty', function (request, response) {
-    var total = 0; // 
-    for (pkey in request.session.cart) {
-        total += request.session.cart[pkey].reduce((a, b) => a + b, 0);
-    }
-    response.json({ qty: total });
-});
-
 // Process Login
 // Borrowed and modified code from Assignment 2, Noah Kim Assignment 3, and Jacob Graham Assignment 3
 app.post('/process_login', function (request, response, next) {
@@ -216,6 +206,16 @@ app.get("/logout", function (request, response) {
         logouterror_msg = `<script>alert("Unable to logout if you are not currently logged in."); location.href="./index.html";</script>`;
         response.send(logouterror_msg);
     }
+});
+
+// Cart quantity, adds cart quantities to navbar
+// Borrowed and modified code from Noah Kim Assignment 3
+app.post('/cart_qty', function (request, response) {
+    var total = 0; // 
+    for (pkey in request.session.cart) {
+        total += request.session.cart[pkey].reduce((a, b) => a + b, 0);
+    }
+    response.json({ qty: total });
 });
 
 // Makes products_data.json into a JavaScript file

@@ -24,7 +24,6 @@ app.use(cookieParser()); // Calls cookies
 // Setup nodemailer
 const nodemailer = require("nodemailer"); // Require nodemailer module
 
-const url = require('url');
 const { count } = require('console');
 const e = require('express'); // For encryption
 const shift = 4;
@@ -81,7 +80,7 @@ app.post('/process_register', function (request, response, next) {
     }
 
     // Full name needs to be less than 30 characters
-    if ((request.body.fullname.length > 30 || request.body.fullname.length < 1)) {
+    if ((request.body.fullname.length < 1 || request.body.fullname.length > 30)) {
         errors.push('Full Name can only be a maximum of 30 characters.')
     }
 
@@ -99,7 +98,7 @@ app.post('/process_register', function (request, response, next) {
     }
 
     // Makes username be a minimum of 4 characters and max of 10
-    if ((request.body.username.length > 10 || request.body.username.length < 4)) {
+    if ((request.body.username.length < 4 || request.body.username.length > 10)) {
         errors.push('Your username must contain 4-10 characters.')
     }
 
@@ -138,7 +137,7 @@ app.post('/process_register', function (request, response, next) {
         </script>`;
         // Saves info to a variable so we can use it for personalization
         var user_info = { "username": username, "name": user_data[username].name, "email": user_data[username].email };
-        response.cookie('user_info', JSON.stringify(user_info), { maxAge: 30 * 60 * 1000 }); // Makes query string of user data into a cookie, then makes it so the data expires after 30 minutes
+        response.cookie('user_info', JSON.stringify(user_info), { maxAge: 30 * 60 * 2000 }); // Makes query string of user data into a cookie, then makes it so the data expires after 60 minutes
         response.send(response_string);
 
     }
@@ -174,7 +173,7 @@ app.post('/process_login', function (request, response, next) {
             location.href = "${'./invoice.html?' + qs.stringify(request.query)}"; 
             </script>`;
             var user_info = { "username": username, "name": user_data[username].name, "email": user_data[username].email };
-            response.cookie('user_info', JSON.stringify(user_info), { maxAge: 30 * 60 * 1000 }); // Makes the session expire after 30 minutes
+            response.cookie('user_info', JSON.stringify(user_info), { maxAge: 30 * 60 * 1000 }); // Makes the session expire after 60 minutes
             response.send(response_string); // Redirects to invoice.html with username info and products if there are no errors
             return;
             // If password is invalid, sends error alert
@@ -236,7 +235,7 @@ app.post('/add_to_cart', function (request, response) {
     var ptype = POST["prod_type"];
     var pindex = POST["prod_index"];
     var cart_info = { "quantity": qty, "type": ptype, "index": pindex };
-    response.cookie('cart_info', JSON.stringify(cart_info), { maxAge: 30 * 60 * 1000 });
+    response.cookie('cart_info', JSON.stringify(cart_info), { maxAge: 30 * 60 * 2000 });
     // If the entered quantity passes the validation tests, add to cart. If the tests are not passed decline
     if (isNonNegInteger(qty) && qty != 0 && qty <= products_data[ptype][pindex].quantity_available) {
         // Adds quantity data to the cart session
